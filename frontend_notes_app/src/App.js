@@ -83,7 +83,7 @@ function App() {
   );
 
   return (
-    <div className="notes-app" data-theme="light">
+    <div className="notes-app">
       <Header
         title="Notes"
         search={search}
