@@ -1,8 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { FiTrash, FiClock } from 'react-icons/fi';
 
+/**
+ * Optionally, parent may pass onDeleteSelected to render a delete button.
+ * This keeps backward compatibility: if absent, no button is shown.
+ */
+ 
 // PUBLIC_INTERFACE
-export default function NoteEditor({ note, onChange }) {
+export default function NoteEditor({ note, onChange, onDeleteSelected }) {
   /** Editor area to modify title and content for the selected note */
   if (!note) {
     return (
@@ -17,6 +23,27 @@ export default function NoteEditor({ note, onChange }) {
   return (
     <section className="editor" aria-label="Note editor">
       <div className="editor-fields">
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
+          <div style={{ color: 'var(--muted)', display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+            <span aria-hidden="true"><FiClock size={16} /></span>
+            <span aria-live="polite">Updated {new Date(note.updatedAt).toLocaleString()}</span>
+          </div>
+          {typeof onDeleteSelected === 'function' && (
+            <button
+              type="button"
+              className="btn btn-danger"
+              onClick={() => onDeleteSelected(note.id)}
+              aria-label="Delete current note"
+              title="Delete note"
+            >
+              <span aria-hidden="true" style={{ display: 'inline-flex', marginRight: 8 }}>
+                <FiTrash size={16} />
+              </span>
+              Delete
+            </button>
+          )}
+        </div>
+
         <label htmlFor="note-title" className="sr-only">Title</label>
         <input
           id="note-title"
@@ -47,4 +74,5 @@ NoteEditor.propTypes = {
     updatedAt: PropTypes.number,
   }),
   onChange: PropTypes.func.isRequired,
+  onDeleteSelected: PropTypes.func,
 };

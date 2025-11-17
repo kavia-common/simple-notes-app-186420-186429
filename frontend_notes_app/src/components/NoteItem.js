@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { FiFileText, FiTrash } from 'react-icons/fi';
 
 function formatRelative(ts) {
   const diff = Date.now() - ts;
@@ -25,7 +26,12 @@ export default function NoteItem({ note, active, onClick, onDelete }) {
         aria-label={`Select note: ${note.title || 'Untitled'}`}
       >
         <div className="note-title-row">
-          <span className="note-title">{note.title || 'Untitled'}</span>
+          <span className="note-title" style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+            <span aria-hidden="true" style={{ color: 'var(--muted)', display: 'inline-flex' }}>
+              <FiFileText size={16} />
+            </span>
+            {note.title || 'Untitled'}
+          </span>
           <time className="note-time" dateTime={new Date(note.updatedAt).toISOString()}>
             {formatRelative(note.updatedAt)}
           </time>
@@ -40,7 +46,9 @@ export default function NoteItem({ note, active, onClick, onDelete }) {
         onClick={(e) => { e.stopPropagation(); onDelete(); }}
         title="Delete note"
       >
-        ×
+        <span aria-hidden="true" style={{ display: 'inline-flex' }}>
+          <FiTrash size={16} />
+        </span>
       </button>
     </li>
   );
